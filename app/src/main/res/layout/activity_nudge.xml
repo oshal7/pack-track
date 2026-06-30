@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/asphalt_black"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SEND SIGNAL"
+        android:textColor="@color/pure_white"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.12"
+        android:gravity="center"
+        android:paddingTop="24dp"
+        android:paddingBottom="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TAP TO ALERT YOUR PACK"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
+        android:letterSpacing="0.15"
+        android:gravity="center"
+        android:paddingBottom="32dp" />
+
+    <!-- Emergency Stop -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEmergency"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="EMERGENCY STOP"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.05"
+        android:textColor="@color/pure_white"
+        app:backgroundTint="#FFD9383A"
+        app:cornerRadius="8dp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Regroup -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRegroup"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="REGROUP AT NEXT STOP"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.05"
+        android:textColor="@color/pure_white"
+        app:backgroundTint="@color/caution_amber"
+        app:cornerRadius="8dp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Acknowledged -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAck"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="ACKNOWLEDGED"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.05"
+        android:textColor="@color/pure_white"
+        app:backgroundTint="@color/success_green"
+        app:cornerRadius="8dp"
+        android:layout_marginBottom="24dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="CLOSE"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-black"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:strokeColor="@color/divider"
+        android:textColor="@color/text_secondary" />
+
+</LinearLayout>

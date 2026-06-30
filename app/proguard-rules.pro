@@ -1,0 +1,5 @@
+-keep class com.packtrack.app.model.** { *; }
+-keep class org.maplibre.** { *; }
+-keep class com.mapbox.geojson.** { *; }
+-dontwarn com.mapbox.**
+-dontwarn org.maplibre.**

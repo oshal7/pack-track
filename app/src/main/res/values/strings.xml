@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PackTrack</string>
+    <string name="onboarding_title">PACKTRACK</string>
+    <string name="onboarding_subtitle">MOTORCYCLE GROUP TRACKING</string>
+    <string name="hint_rider_name">YOUR RIDER NAME</string>
+    <string name="btn_start">START RIDING</string>
+    <string name="btn_create_ride">CREATE RIDE</string>
+    <string name="btn_join_ride">JOIN RIDE</string>
+    <string name="hint_destination">SEARCH DESTINATION</string>
+    <string name="btn_search">SEARCH</string>
+    <string name="btn_launch_ride">LAUNCH RIDE</string>
+    <string name="hint_join_pin">ENTER 4-DIGIT PIN</string>
+    <string name="btn_join_confirm">JOIN PACK</string>
+    <string name="nudge_title">SEND SIGNAL</string>
+    <string name="btn_emergency">EMERGENCY STOP</string>
+    <string name="btn_regroup">REGROUP AT NEXT STOP</string>
+    <string name="btn_ack">ACKNOWLEDGED</string>
+    <string name="btn_end_ride">END RIDE</string>
+</resources>

@@ -1,0 +1,134 @@
+name: Build PackTrack APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      version_override:
+        description: 'Version name override (e.g. 1.2.0). Leave empty to auto-increment.'
+        required: false
+        default: ''
+
+env:
+  VERSION_CODE: ${{ github.run_number }}
+  VERSION_NAME: ${{ github.event.inputs.version_override != '' && github.event.inputs.version_override || format('1.0.{0}', github.run_number) }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.6'
+
+      - name: Inject real Firebase config (if secret is set)
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
+            echo "Using real Firebase configuration"
+          else
+            echo "Using placeholder Firebase config — Firestore disabled until you add GOOGLE_SERVICES_JSON secret"
+          fi
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+      - name: Decode signing keystore (if secret is set)
+        run: |
+          if [ -n "$SIGNING_KEY" ]; then
+            mkdir -p keystore
+            echo "$SIGNING_KEY" | base64 -d > keystore/packtrack.jks
+            echo "Release keystore decoded"
+          else
+            echo "No signing key secret — using debug signing (APK cannot be updated in-place across builds)"
+          fi
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+
+      - name: Build Release APK
+        run: gradle assembleRelease
+        env:
+          VERSION_CODE: ${{ env.VERSION_CODE }}
+          VERSION_NAME: ${{ env.VERSION_NAME }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+
+      - name: Rename APK with version
+        run: |
+          mkdir -p output
+          cp app/build/outputs/apk/release/app-release.apk \
+             output/PackTrack-v${{ env.VERSION_NAME }}.apk
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PackTrack-v${{ env.VERSION_NAME }}
+          path: output/PackTrack-v${{ env.VERSION_NAME }}.apk
+          retention-days: 90
+
+      # Create/update the "latest" release so the download link is always the same
+      - name: Delete old "latest" release and tag
+        run: |
+          gh release delete latest --yes 2>/dev/null || true
+          git push origin :refs/tags/latest 2>/dev/null || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create "latest" release with direct download link
+        run: |
+          REPO="${{ github.repository }}"
+          VER="${{ env.VERSION_NAME }}"
+          NOTES=$(cat <<BODY
+          ## PackTrack v${VER} (Build #${{ github.run_number }})
+
+          ### Direct APK Download
+          **[PackTrack-v${VER}.apk](https://github.com/${REPO}/releases/download/latest/PackTrack-v${VER}.apk)**
+
+          ### Install Instructions
+          1. Download the APK above on your Android phone
+          2. If prompted, enable "Install from unknown sources" in Settings → Security
+          3. Tap the downloaded file to install
+          4. On subsequent updates: just download and install — Android will update the existing app automatically (same signing key = update in place)
+
+          ### Firebase Setup Required for Live Tracking
+          Location sharing requires a real Firebase project. See README for setup instructions.
+
+          ---
+          Commit: ${{ github.sha }}
+          BODY
+          )
+          gh release create latest \
+            --title "PackTrack Latest (v${VER})" \
+            --notes "$NOTES" \
+            output/PackTrack-v${VER}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION_NAME: ${{ env.VERSION_NAME }}
+
+      # Also create a versioned release for history
+      - name: Create versioned release
+        run: |
+          VER="${{ env.VERSION_NAME }}"
+          gh release create "v${VER}" \
+            --title "PackTrack v${VER}" \
+            --notes "Build #${{ github.run_number }} — see [latest release](https://github.com/${{ github.repository }}/releases/latest) for download." \
+            output/PackTrack-v${VER}.apk 2>/dev/null || echo "Versioned release already exists"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION_NAME: ${{ env.VERSION_NAME }}
