@@ -2,7 +2,7 @@ name: Build PackTrack APK
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
   workflow_dispatch:
     inputs:
       version_override:
@@ -82,8 +82,9 @@ jobs:
           path: output/PackTrack-v${{ env.VERSION_NAME }}.apk
           retention-days: 90
 
-      # Create/update the "latest" release so the download link is always the same
+      # Release steps only run on main branch
       - name: Delete old "latest" release and tag
+        if: github.ref == 'refs/heads/main'
         run: |
           gh release delete latest --yes 2>/dev/null || true
           git push origin :refs/tags/latest 2>/dev/null || true
@@ -91,6 +92,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create "latest" release with direct download link
+        if: github.ref == 'refs/heads/main'
         run: |
           REPO="${{ github.repository }}"
           VER="${{ env.VERSION_NAME }}"
@@ -123,6 +125,7 @@ jobs:
 
       # Also create a versioned release for history
       - name: Create versioned release
+        if: github.ref == 'refs/heads/main'
         run: |
           VER="${{ env.VERSION_NAME }}"
           gh release create "v${VER}" \
