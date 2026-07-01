@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.JavascriptInterface
-import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +33,7 @@ class RideActivity : AppCompatActivity() {
     private var destLat = 0.0
     private var destLng = 0.0
     private var pin = ""
+    private var routeGeoJson = ""
     private var mapReady = false
 
     private lateinit var adapter: RiderAdapter
@@ -50,7 +50,7 @@ class RideActivity : AppCompatActivity() {
         destLat = intent.getDoubleExtra(EXTRA_DEST_LAT, 0.0)
         destLng = intent.getDoubleExtra(EXTRA_DEST_LNG, 0.0)
         val destName = intent.getStringExtra(EXTRA_DEST_NAME) ?: "Destination"
-        val routeGeoJson = intent.getStringExtra(EXTRA_ROUTE_GEOJSON) ?: ""
+        routeGeoJson = intent.getStringExtra(EXTRA_ROUTE_GEOJSON) ?: ""
 
         binding.tvDestinationName.text = destName.uppercase()
         binding.tvPin.text = "PIN: $pin"
@@ -67,20 +67,6 @@ class RideActivity : AppCompatActivity() {
         binding.btnEndRide.setOnClickListener { endRide() }
 
         LocationForegroundService.start(this)
-
-        binding.webMap.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-                mapReady = true
-                if (destLat != 0.0) {
-                    binding.webMap.evaluateJavascript("setDestination($destLat, $destLng);", null)
-                }
-                if (routeGeoJson.isNotBlank()) {
-                    val escaped = routeGeoJson.replace("'", "\\'")
-                    binding.webMap.evaluateJavascript("drawRoute('$escaped');", null)
-                }
-                observeRiders()
-            }
-        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -89,6 +75,9 @@ class RideActivity : AppCompatActivity() {
             javaScriptEnabled = true
             domStorageEnabled = true
         }
+        // WebViewClient must be set BEFORE loadUrl — for file:// assets the page can
+        // finish loading before onCreate sets it, causing onPageFinished to be missed.
+        binding.webMap.webViewClient = WebViewClient()
         binding.webMap.addJavascriptInterface(MapBridge(), "Android")
         binding.webMap.loadUrl("file:///android_asset/map.html")
     }
@@ -156,7 +145,19 @@ class RideActivity : AppCompatActivity() {
     inner class MapBridge {
         @JavascriptInterface
         fun onMapReady() {
-            runOnUiThread { mapReady = true }
+            // This fires from JS after Leaflet initialises — the correct point to push
+            // destination, route, and start streaming rider positions.
+            runOnUiThread {
+                mapReady = true
+                if (destLat != 0.0) {
+                    binding.webMap.evaluateJavascript("setDestination($destLat, $destLng);", null)
+                }
+                if (routeGeoJson.isNotBlank()) {
+                    val escaped = routeGeoJson.replace("'", "\\'")
+                    binding.webMap.evaluateJavascript("drawRoute('$escaped');", null)
+                }
+                observeRiders()
+            }
         }
     }
 

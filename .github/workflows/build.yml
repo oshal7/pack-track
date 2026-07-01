@@ -60,6 +60,12 @@ jobs:
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
 
+      - name: Bundle Leaflet.js into assets
+        run: |
+          curl -fsSL https://unpkg.com/leaflet@1.9.4/dist/leaflet.js -o app/src/main/assets/leaflet.js
+          curl -fsSL https://unpkg.com/leaflet@1.9.4/dist/leaflet.css -o app/src/main/assets/leaflet.css
+          echo "Leaflet $(wc -c < app/src/main/assets/leaflet.js) bytes bundled"
+
       - name: Build Release APK
         run: gradle assembleRelease
         env:
