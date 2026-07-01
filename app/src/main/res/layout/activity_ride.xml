@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:background="@color/asphalt_black">
 
-    <!-- Full-screen map -->
-    <org.maplibre.android.maps.MapView
-        android:id="@+id/mapView"
+    <!-- Full-screen WebView map (Leaflet.js + OpenStreetMap) -->
+    <WebView
+        android:id="@+id/webMap"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

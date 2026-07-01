@@ -79,8 +79,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3'
 
-    // MapLibre (OSM tiles, free & open-source)
-    implementation 'org.maplibre.gl:android-sdk:10.2.0'
+    // WebView is built-in — Leaflet.js map served from assets (no SDK dependency needed)
 
     // Firebase (Spark tier - free)
     implementation platform('com.google.firebase:firebase-bom:32.7.2')
