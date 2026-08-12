@@ -18,7 +18,7 @@ object OsrmUtils {
         val durationSeconds: Double
     )
 
-    data class GeoPoint(val lat: Double, val lng: Double)
+    data class GeoResult(val lat: Double, val lng: Double, val displayName: String)
 
     suspend fun fetchRoute(
         fromLat: Double, fromLng: Double,
@@ -50,10 +50,10 @@ object OsrmUtils {
         }
     }
 
-    suspend fun geocode(query: String): List<GeoPoint> = withContext(Dispatchers.IO) {
+    suspend fun geocode(query: String): List<GeoResult> = withContext(Dispatchers.IO) {
         try {
-            val encoded = query.replace(" ", "+")
-            val url = "https://nominatim.openstreetmap.org/search?q=$encoded&format=json&limit=5"
+            val encoded = java.net.URLEncoder.encode(query.trim(), "UTF-8")
+            val url = "https://nominatim.openstreetmap.org/search?q=$encoded&format=json&limit=5&addressdetails=0"
             val request = Request.Builder()
                 .url(url)
                 .header("User-Agent", "PackTrackApp/1.0 (android)")
@@ -65,7 +65,11 @@ object OsrmUtils {
             val arr = JsonParser.parseString(body).asJsonArray
             arr.map { el ->
                 val obj = el.asJsonObject
-                GeoPoint(obj.get("lat").asDouble, obj.get("lon").asDouble)
+                GeoResult(
+                    lat = obj.get("lat").asDouble,
+                    lng = obj.get("lon").asDouble,
+                    displayName = obj.get("display_name").asString
+                )
             }
         } catch (e: Exception) {
             Log.e("OsrmUtils", "Geocode failed", e)

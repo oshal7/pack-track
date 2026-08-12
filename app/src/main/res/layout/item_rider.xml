@@ -7,15 +7,15 @@
     android:background="@color/surface_dark"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp">
+    android:paddingTop="13dp"
+    android:paddingBottom="13dp">
 
-    <!-- Status dot -->
+    <!-- Circular status dot -->
     <View
         android:id="@+id/viewStatusDot"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:background="@color/success_green"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:background="@drawable/bg_status_dot"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -26,58 +26,71 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/pure_white"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:fontFamily="sans-serif-medium"
         android:maxLines="1"
         android:ellipsize="end"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/viewStatusDot"
         app:layout_constraintEnd_toStartOf="@+id/tvRiderDist"
-        android:layout_marginStart="12dp" />
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp" />
 
-    <!-- Status label -->
+    <!-- Status label below name -->
     <TextView
         android:id="@+id/tvRiderStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/success_green"
-        android:textSize="11sp"
+        android:textSize="10sp"
         android:fontFamily="sans-serif-medium"
-        android:letterSpacing="0.1"
+        android:letterSpacing="0.12"
         app:layout_constraintTop_toBottomOf="@+id/tvRiderName"
         app:layout_constraintStart_toEndOf="@+id/viewStatusDot"
         app:layout_constraintEnd_toStartOf="@+id/tvNudge"
         android:layout_marginStart="12dp"
         android:layout_marginTop="2dp" />
 
-    <!-- Distance to destination -->
+    <!-- Distance — right column, vertically centred -->
     <TextView
         android:id="@+id/tvRiderDist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_secondary"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:fontFamily="sans-serif-medium"
+        android:fontVariantNumeric="tabular-nums"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Nudge badge -->
+    <!-- Nudge badge — sits below distance, right-aligned -->
     <TextView
         android:id="@+id/tvNudge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/pure_white"
-        android:textSize="10sp"
+        android:textSize="9sp"
         android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.05"
         android:background="@color/racer_red"
         android:paddingStart="6dp"
         android:paddingEnd="6dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/tvRiderName"
+        app:layout_constraintTop_toBottomOf="@+id/tvRiderDist"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="2dp" />
+        android:layout_marginTop="3dp" />
+
+    <!-- Row divider at bottom -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#1EFFFFFF"
+        android:layout_marginTop="13dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvRiderStatus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.packtrack.app.ui.ride
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,7 +27,8 @@ class RiderAdapter(private val myRiderId: String) :
                 Rider.STATUS_REGROUP -> Pair(Color.parseColor("#FF6F00"), "REGROUP")
                 else -> Pair(Color.parseColor("#4CAF50"), "MOVING")
             }
-            binding.viewStatusDot.setBackgroundColor(color)
+            // Tint the oval drawable without replacing it with a flat rectangle
+            binding.viewStatusDot.backgroundTintList = ColorStateList.valueOf(color)
             binding.tvRiderStatus.text = label
             binding.tvRiderStatus.setTextColor(color)
 

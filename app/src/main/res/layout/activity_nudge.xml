@@ -6,29 +6,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/asphalt_black"
-    android:padding="16dp">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="24dp">
+
+    <!-- Handle bar -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:background="@color/divider" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SEND SIGNAL"
         android:textColor="@color/pure_white"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:fontFamily="sans-serif-black"
-        android:letterSpacing="0.12"
+        android:letterSpacing="0.1"
         android:gravity="center"
-        android:paddingTop="24dp"
-        android:paddingBottom="8dp" />
+        android:paddingTop="20dp"
+        android:paddingBottom="4dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TAP TO ALERT YOUR PACK"
         android:textColor="@color/text_secondary"
-        android:textSize="12sp"
-        android:letterSpacing="0.15"
+        android:textSize="11sp"
+        android:letterSpacing="0.2"
         android:gravity="center"
-        android:paddingBottom="32dp" />
+        android:paddingBottom="28dp" />
 
     <!-- Emergency Stop -->
     <com.google.android.material.button.MaterialButton
@@ -37,12 +47,16 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="EMERGENCY STOP"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:fontFamily="sans-serif-black"
-        android:letterSpacing="0.05"
+        android:letterSpacing="0.04"
         android:textColor="@color/pure_white"
         app:backgroundTint="#FFD9383A"
-        app:cornerRadius="8dp"
+        app:cornerRadius="6dp"
+        app:icon="@drawable/ic_motorcycle"
+        app:iconTint="@color/pure_white"
+        app:iconSize="28dp"
+        app:iconGravity="textStart"
         android:layout_marginBottom="12dp" />
 
     <!-- Regroup -->
@@ -52,12 +66,16 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="REGROUP AT NEXT STOP"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:fontFamily="sans-serif-black"
-        android:letterSpacing="0.05"
+        android:letterSpacing="0.04"
         android:textColor="@color/pure_white"
         app:backgroundTint="@color/caution_amber"
-        app:cornerRadius="8dp"
+        app:cornerRadius="6dp"
+        app:icon="@drawable/ic_motorcycle"
+        app:iconTint="@color/pure_white"
+        app:iconSize="28dp"
+        app:iconGravity="textStart"
         android:layout_marginBottom="12dp" />
 
     <!-- Acknowledged -->
@@ -66,22 +84,27 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="ACKNOWLEDGED"
-        android:textSize="22sp"
+        android:text="ALL GOOD — ACK"
+        android:textSize="20sp"
         android:fontFamily="sans-serif-black"
-        android:letterSpacing="0.05"
+        android:letterSpacing="0.04"
         android:textColor="@color/pure_white"
         app:backgroundTint="@color/success_green"
-        app:cornerRadius="8dp"
-        android:layout_marginBottom="24dp" />
+        app:cornerRadius="6dp"
+        app:icon="@drawable/ic_motorcycle"
+        app:iconTint="@color/pure_white"
+        app:iconSize="28dp"
+        app:iconGravity="textStart"
+        android:layout_marginBottom="20dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnClose"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:text="CLOSE"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.05"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:strokeColor="@color/divider"
         android:textColor="@color/text_secondary" />
